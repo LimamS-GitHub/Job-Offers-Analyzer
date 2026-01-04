@@ -22,13 +22,14 @@ Client → `localhost:8001` (published by gluetun) → FastAPI (scraper) → out
 
 .
 ├─ docker-compose.yml  
-├─ .env.example  
+├─ .env 
+├─ test_scrap.ipynb 
 ├─ scraper/  
 │  ├─ Dockerfile  
 │  ├─ requirements.txt  
 │  └─ app/  
 │     └─ main.py  
-└─ data/  # optional: mounted volume for scraped data or logs
+└─ ReadMe/
 
 ## Quick start
 1. Create a Free protonvpn account then get your ProtonVPN/Wireguard credentials.
