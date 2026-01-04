@@ -38,7 +38,6 @@ Client → `localhost:8001` (published by gluetun) → FastAPI (scraper) → out
 ```
 # Config de base
 TZ=Australia/Brisbane
-MEDIA_DIR=/media
 
 # Config OpenVPN
 OPENVPN_USER=yTUo8aehLIsdpEJi
