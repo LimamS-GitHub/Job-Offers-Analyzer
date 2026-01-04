@@ -32,10 +32,24 @@ Client → `localhost:8001` (published by gluetun) → FastAPI (scraper) → out
 
 ## Quick start
 1. Create a Free protonvpn account then get your ProtonVPN/Wireguard credentials.
-2. Copy `.env.example` to `.env` and configure your ProtonVPN/Wireguard credentials.  
-3. Start services:
+2. Create `.env` and configure your ProtonVPN/Wireguard credentials.
+
+.env example :
+```
+# Config de base
+TZ=Australia/Brisbane
+MEDIA_DIR=/media
+
+# Config OpenVPN
+OPENVPN_USER=yTUo8aehLIsdpEJi
+OPENVPN_PASSWORD=rCf0TVb5xY138sOqTZ0vWTfxy7ColP7r
+
+# Config WireGuard (clé exemple)
+WIREGUARD_PRIVATE_KEY=4HWGAPClLkRcnGSJ1DDFUU7lVg1zT3Wl51K/a92j+2c=
+```
+4. Start services:
     docker compose up -d
-4. Call the scraper endpoint (example in test_scrap.ipynb)
+5. Call the scraper endpoint (example in test_scrap.ipynb)
 
 Notes:
 - The scraper container uses `network_mode: service:gluetun`, so it has no separate published ports; external access is exposed via the gluetun service.  
