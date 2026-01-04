@@ -1,17 +1,17 @@
-# FastAPI Scraper behind VPN (Gluetun + ProtonVPN OpenVPN)
+# FastAPI Scraper behind VPN (Gluetun + ProtonVPN Wireguard)
 
-This project runs a FastAPI scraping API whose outgoing traffic is forced through a VPN using qmcgaw/gluetun (OpenVPN → ProtonVPN). The FastAPI container shares the network namespace of the VPN container, preventing any outbound traffic from bypassing the VPN.
+This project runs a FastAPI scraping API whose outgoing traffic is forced through a VPN using qmcgaw/gluetun (Wireguard → ProtonVPN). The FastAPI container shares the network namespace of the VPN container, preventing any outbound traffic from bypassing the VPN.
 
 ## Highlights
 
 - ✅ FastAPI endpoint that fetches a webpage and returns raw HTML  
-- ✅ All outbound HTTP requests routed through the VPN tunnel (OpenVPN)  
+- ✅ All outbound HTTP requests routed through the VPN tunnel (Wireguard)  
 - ✅ Kill‑switch and firewall behavior enforced by Gluetun to prevent leaks  
 - ✅ Single Docker Compose setup for reproducible local deployment
 
 ## Architecture
 
-- **gluetun** — VPN gateway (OpenVPN → ProtonVPN) with built‑in firewall / kill‑switch  
+- **gluetun** — VPN gateway (Wireguard → ProtonVPN) with built‑in firewall / kill‑switch  
 - **scraper** — FastAPI service that shares gluetun’s network stack via `network_mode: service:gluetun`
 
 ### Network flow
@@ -31,11 +31,25 @@ Client → `localhost:8001` (published by gluetun) → FastAPI (scraper) → out
 └─ data/  # optional: mounted volume for scraped data or logs
 
 ## Quick start
-1. Create a Free protonvpn account then get your ProtonVPN/OpenVPN credentials.
-2. Copy `.env.example` to `.env` and configure your ProtonVPN/OpenVPN credentials.  
-3. Start services:
+1. Create a Free protonvpn account then get your ProtonVPN/Wireguard credentials.
+2. Create `.env` and configure your ProtonVPN/Wireguard credentials.
+
+.env example :
+```
+# Config de base
+TZ=Australia/Brisbane
+MEDIA_DIR=/media
+
+# Config OpenVPN
+OPENVPN_USER=yTUo8aehLIsdpEJi
+OPENVPN_PASSWORD=rCf0TVb5xY138sOqTZ0vWTfxy7ColP7r
+
+# Config WireGuard (clé exemple)
+WIREGUARD_PRIVATE_KEY=4HWGAPClLkRcnGSJ1DDFUU7lVg1zT3Wl51K/a92j+2c=
+```
+4. Start services:
     docker compose up -d
-4. Call the scraper endpoint (example in test_scrap.ipynb)
+5. Call the scraper endpoint (example in test_scrap.ipynb)
 
 Notes:
 - The scraper container uses `network_mode: service:gluetun`, so it has no separate published ports; external access is exposed via the gluetun service.  
