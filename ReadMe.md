@@ -1,4 +1,4 @@
-# FastAPI Scraper behind VPN (Gluetun + ProtonVPN OpenVPN)
+# FastAPI Scraper behind VPN (Gluetun + ProtonVPN Wireguard)
 
 This project runs a FastAPI scraping API whose outgoing traffic is forced through a VPN using qmcgaw/gluetun (OpenVPN → ProtonVPN). The FastAPI container shares the network namespace of the VPN container, preventing any outbound traffic from bypassing the VPN.
 
