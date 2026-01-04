@@ -20,10 +20,6 @@ services:
       - VPN_PORT_FORWARDING=off
       - PORT_FORWARD_ONLY=off
 
-    volumes:
-      - ${MEDIA_DIR}/gluetun/config:/gluetun
-
-    # Très utile pour depends_on: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8000/v1/openvpn/status"]
       interval: 10s
@@ -42,15 +38,10 @@ services:
       gluetun:
         condition: service_healthy
 
-    # IMPORTANT: partage la pile réseau de gluetun => tout sort via VPN
     network_mode: "service:gluetun"
 
     environment:
       - TZ=${TZ}
-      # tes variables applicatives
       - PYTHONUNBUFFERED=1
-
-    volumes:
-      - ./scraper/app:/app
 
     restart: unless-stopped
