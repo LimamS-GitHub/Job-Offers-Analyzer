@@ -6,10 +6,12 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
-
     ports:
       - "8001:8001"
-      
+      - "8501:8501" 
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     environment:
       - VPN_SERVICE_PROVIDER=protonvpn
       - VPN_TYPE=Wireguard
@@ -19,29 +21,27 @@ services:
       - SERVER_COUNTRIES=Netherlands
       - VPN_PORT_FORWARDING=off
       - PORT_FORWARD_ONLY=off
-
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8000/v1/openvpn/status"]
       interval: 10s
       timeout: 5s
       retries: 10
-
     restart: unless-stopped
 
-
-  scraper:
+  streamlit:
     build:
-      context: ./scraper
+      context: ./streamlit
       dockerfile: Dockerfile
-    container_name: scraper
+    container_name: streamlit
+    network_mode: "service:gluetun"  # ✅ partage le réseau VPN
     depends_on:
       gluetun:
         condition: service_healthy
-
-    network_mode: "service:gluetun"
-
     environment:
       - TZ=${TZ}
-      - PYTHONUNBUFFERED=1
-
+      - DNS_KEEP_NAMESERVER=on
+    volumes:
+      - ./streamlit:/app
+    working_dir: /app
+    command: streamlit run app/app_streamlit.py --server.address=0.0.0.0 --server.port=8501
     restart: unless-stopped
