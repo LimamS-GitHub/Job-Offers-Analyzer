@@ -1,39 +1,63 @@
-# FastAPI Scraper behind VPN (Gluetun + ProtonVPN Wireguard)
+# Offers Analytics — Scraper API behind VPN (Gluetun + ProtonVPN WireGuard)
 
-This project runs a FastAPI scraping API whose outgoing traffic is forced through a VPN using qmcgaw/gluetun (Wireguard → ProtonVPN). The FastAPI container shares the network namespace of the VPN container, preventing any outbound traffic from bypassing the VPN.
+This project provides a secure scraping pipeline powered by FastAPI, where all outbound traffic is routed through a VPN tunnel using Gluetun (WireGuard + ProtonVPN).  
+A Streamlit application is included to visualize and analyze extracted job offers.
 
-## Highlights
+The architecture ensures that no network traffic can bypass the VPN, thanks to Gluetun’s firewall and kill-switch mechanisms.
 
-- ✅ FastAPI endpoint that fetches a webpage and returns raw HTML  
-- ✅ All outbound HTTP requests routed through the VPN tunnel (Wireguard)  
-- ✅ Kill‑switch and firewall behavior enforced by Gluetun to prevent leaks  
-- ✅ Single Docker Compose setup for reproducible local deployment
+---
 
-## Architecture
+## 🚀 Features
 
-- **gluetun** - VPN gateway (Wireguard → ProtonVPN) with built‑in firewall / kill‑switch  
-- **scraper** - FastAPI service that shares gluetun’s network stack via `network_mode: service:gluetun`
-- **streamlit app** - Streamlit web application interface that allows ....
+- ✅ FastAPI scraping API to fetch and process web pages  
+- ✅ Outbound traffic forced through ProtonVPN (WireGuard)  
+- ✅ Kill-switch & firewall protection via Gluetun  
+- ✅ Streamlit web app for job offer analysis and visualization  
+- ✅ Dockerized architecture for reproducible deployment  
+- ✅ Secure handling of environment variables (.env)
+
+---
+
+## 🏗️ Architecture
+
+### Services
+
+- **gluetun**  
+  VPN gateway (WireGuard → ProtonVPN) with firewall and kill-switch.
+
+- **scraper**  
+  FastAPI service that performs web scraping.  
+  It shares Gluetun’s network stack using:
+  ```yaml
+  network_mode: service:gluetun
+
+- **streamlit app** - Web interface to analyze and visualize scraped job offers using NLP and AI.
 
 ### Network flow
 
-Client → `localhost:8001` (published by gluetun) → FastAPI (scraper) → outbound HTTP via VPN tunnel
+Client → localhost:8001 (Gluetun) → Target Website (via VPN) → FastAPI Scraper
 
 ## Project structure
-
+```
 .
-├─ docker-compose.yml  
-├─ .env 
-├─ test_scrap.ipynb 
-├─ scraper/  
-│  ├─ Dockerfile  
-│  ├─ requirements.txt  
-│  └─ app/  
-│     └─ main.py  
-└─ ReadMe/
+├── docker-compose.yml          # Orchestrates gluetun, scraper, and streamlit services
+├── .env                        # Environment variables (ProtonVPN credentials, API keys)
+├── scraper/                    # FastAPI scraping service
+│   ├── Dockerfile             # Container image for scraper
+│   ├── requirements.txt        # Python dependencies
+│   └── app/
+│       └── main.py            # FastAPI application entry point
+├── streamlit/                  # Data visualization and analysis app
+│   ├── app_streamlit.py       # Streamlit UI application
+│   ├── Dockerfile             # Container image for streamlit
+│   └── requirements.txt        # Python dependencies
+└── README.md                   # This file
+```
+
 
 ## Quick start
 1. Create a Free protonvpn account then get your ProtonVPN/Wireguard credentials.
+2. Create an API key on Google Generative AI and keep it secure.
 2. Create `.env` and configure your ProtonVPN/Wireguard credentials.
 
 .env example :
@@ -45,13 +69,23 @@ TZ=Australia/Brisbane
 OPENVPN_USER=****
 OPENVPN_PASSWORD=****
 
-# Config WireGuard (clé exemple)
-WIREGUARD_PRIVATE_KEY=4****
+# Config WireGuard
+WIREGUARD_PRIVATE_KEY=****
+
+# Google API Key gen ai
+GENAI_API_KEY=****
 ```
-4. Start services:
-    docker compose up -d
-5. Call the scraper endpoint (example in test_scrap.ipynb)
+### 4️⃣ Start the services
+
+Run the following command in your terminal:
+
+```bash
+docker compose up -d
+```
+5. You can run the web app locally on *http://localhost:8501/*
 
 Notes:
-- The scraper container uses `network_mode: service:gluetun`, so it has no separate published ports; external access is exposed via the gluetun service.  
-- Ensure you keep container images and the Azure/OS environment up to date for security and reliability.
+- This project is for educational and research purposes only.
+- Make sure to respect websites’ Terms of Service when scraping.
+- Avoid collecting or storing personal or sensitive data.
+- Use reasonable request rates to prevent abuse or service disruption.
