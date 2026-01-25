@@ -11,8 +11,9 @@ This project runs a FastAPI scraping API whose outgoing traffic is forced throug
 
 ## Architecture
 
-- **gluetun** — VPN gateway (Wireguard → ProtonVPN) with built‑in firewall / kill‑switch  
-- **scraper** — FastAPI service that shares gluetun’s network stack via `network_mode: service:gluetun`
+- **gluetun** - VPN gateway (Wireguard → ProtonVPN) with built‑in firewall / kill‑switch  
+- **scraper** - FastAPI service that shares gluetun’s network stack via `network_mode: service:gluetun`
+- **streamlit app** - Streamlit web application interface that allows ....
 
 ### Network flow
 
@@ -41,11 +42,11 @@ Client → `localhost:8001` (published by gluetun) → FastAPI (scraper) → out
 TZ=Australia/Brisbane
 
 # Config OpenVPN
-OPENVPN_USER=yTUo8aehLIsdpEJi
-OPENVPN_PASSWORD=rCf0TVb5xY138sOqTZ0vWTfxy7ColP7r
+OPENVPN_USER=****
+OPENVPN_PASSWORD=****
 
 # Config WireGuard (clé exemple)
-WIREGUARD_PRIVATE_KEY=4HWGAPClLkRcnGSJ1DDFUU7lVg1zT3Wl51K/a92j+2c=
+WIREGUARD_PRIVATE_KEY=4****
 ```
 4. Start services:
     docker compose up -d
