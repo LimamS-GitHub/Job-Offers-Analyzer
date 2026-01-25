@@ -10,11 +10,12 @@ The architecture ensures that no network traffic can bypass the VPN, thanks to G
 ## 🚀 Features
 
 - ✅ FastAPI scraping API to fetch and process web pages  
-- ✅ Outbound traffic forced through ProtonVPN (WireGuard)  
+- ✅ All outbound traffic forced through ProtonVPN (WireGuard)  
 - ✅ Kill-switch & firewall protection via Gluetun  
 - ✅ Streamlit web app for job offer analysis and visualization  
 - ✅ Dockerized architecture for reproducible deployment  
-- ✅ Secure handling of environment variables (.env)
+- ✅ Secure handling of environment variables (.env)  
+- ✅ AI-based extraction of skills and job information (Google GenAI)
 
 ---
 
