@@ -9,3 +9,5 @@ pydantic
 beautifulsoup4
 google.generativeai
 load_dotenv
+matplotlib
+geopy

@@ -41,18 +41,20 @@ Client → localhost:8001 (Gluetun) → Target Website (via VPN) → FastAPI Scr
 ## Project structure
 ```
 .
-├── docker-compose.yml          # Orchestrates gluetun, scraper, and streamlit services
-├── .env                        # Environment variables (ProtonVPN credentials, API keys)
-├── scraper/                    # FastAPI scraping service
+├── docker-compose.yml         # Orchestrates gluetun, scraper, and streamlit services
+├── .env                       # Environment variables (ProtonVPN credentials, API keys)
+├── scraper/                   # FastAPI scraping service
 │   ├── Dockerfile             # Container image for scraper
-│   ├── requirements.txt        # Python dependencies
+│   ├── requirements.txt       # Python dependencies
 │   └── app/
 │       └── main.py            # FastAPI application entry point
-├── streamlit/                  # Data visualization and analysis app
-│   ├── app_streamlit.py       # Streamlit UI application
+├── streamlit/                 # Data visualization and analysis app
+│   ├── app/
+│   │   ├── .env               # Environment variables (ProtonVPN credentials, API keys)
+│   │   └── app_streamlit.py   # Streamlit UI application
 │   ├── Dockerfile             # Container image for streamlit
-│   └── requirements.txt        # Python dependencies
-└── README.md                   # This file
+│   └── requirements.txt       # Python dependencies
+└── README.md                  # This file
 ```
 
 
