@@ -2,7 +2,6 @@
 
 import os
 import streamlit as st
-import pandas as pd
 import time
 import httpx
 import json
@@ -11,7 +10,6 @@ from bs4 import BeautifulSoup
 from datetime import date, timedelta
 from typing import Optional, Dict, List, Tuple
 import re
-import asyncio
 import google.generativeai as genai
 from dotenv import load_dotenv
 
@@ -38,46 +36,27 @@ MODEL = genai.GenerativeModel("gemini-2.5-flash-lite")
 
 def prompt_gemini(job_offer: str) -> str:
     return f"""
-        Tu es un extracteur d'informations d'offres d'emploi.
-        Retourne UNIQUEMENT un JSON valide (sans texte, sans ```json).
+Tu es un extracteur d'informations d'offres d'emploi.
+Réponds uniquement avec un JSON valide. Pas de markdown. Pas de texte.
 
-        Règles :
-        - N'invente rien.
-        - Si absent → null ou [].
-        - Déduplique et normalise les termes.
+Contraintes:
+- N'invente rien.
+- Si absent: null ou [].
+- Déduplique, trim, normalise (même casse).
+- Respecte EXACTEMENT les clés ci-dessous.
 
-        Champs à extraire :
+JSON attendu:
+{{
+  "hard_skills": [],
+  "soft_skills": [],
+  "years_experience_min": null,
+  "domains": []
+}}
 
-        1) hard_skills :
-        - Compétences techniques explicitement mentionnées.
-        - Type : list of strings
+Texte:
+\"\"\"{job_offer}\"\"\"
+""".strip()
 
-        2) soft_skills :
-        - Compétences comportementales explicitement mentionnées.
-        - Type : list of strings
-
-        3) Years of experience minimum :
-        - Nombre d’années d’expérience explicitement mentionné (ex: "3").
-        - Type : integer.
-        - Sinon → null.
-
-        4) Experience domain preference :
-        - Domaines explicitement mentionnés dans l’offre (Banque, Santé, Finance, E-commerce, Industrie, Assurance…).
-        - Sinon → [].
-
-        Format JSON obligatoire :
-        {{
-        "hard_skills": [],
-        "soft_skills": [],
-        "Years of experience": null,
-        "Experience domain preference": []
-        }}
-
-        Texte de l'offre :
-        \"\"\"
-        {job_offer}
-        \"\"\"
-        """
 
 def build_search_url(job: str, country: str, contract_type: str = "") -> str:
     """
@@ -231,8 +210,8 @@ def extract_text_from_job(url: str, client: httpx.Client) -> Dict[str, Optional[
             return {
                 "hard_skills": [],
                 "soft_skills": [],
-                "Years of experience": None, 
-                "Experience domain preference": []} 
+                "years_experience_min": None, 
+                "domains": []} 
 
         soup = BeautifulSoup(r.text, "html.parser")
 
@@ -263,14 +242,14 @@ def extract_text_from_job(url: str, client: httpx.Client) -> Dict[str, Optional[
             return {
                 "hard_skills": None,
                 "soft_skills": None,
-                "Years of experience": experience_years, 
-                "Experience domain preference": None}
+                "years_experience_min": experience_years, 
+                "domains": None}
         if metier.lower() not in job_offer.lower():
             return {
                 "hard_skills": [],
                 "soft_skills": [],
-                "Years of experience": None, 
-                "Experience domain preference": []} 
+                "years_experience_min": None, 
+                "domains": []} 
             
         for _ in range(5):
             prompt = prompt_gemini(job_offer)
@@ -280,12 +259,12 @@ def extract_text_from_job(url: str, client: httpx.Client) -> Dict[str, Optional[
             # Parser la réponse JSON
             try:
                 data = json.loads(result.text)
-                if 'hard_skills' not in data or 'soft_skills' not in data or 'Years of experience' not in data or 'Experience domain preference' not in data:
+                if 'hard_skills' not in data or 'soft_skills' not in data or 'years_experience_min' not in data or 'domains' not in data:
                     st.warning(f"Champs manquants dans la réponse pour l'offre {url}. Tentative {_+1}/5.")
                     continue
                 data['hard_skills'] = sorted(data['hard_skills'], key=str.lower)
                 data['soft_skills'] = sorted(data['soft_skills'], key=str.lower)
-                data['Years of experience'] = int(data['Years of experience']) if data['Years of experience'] is not None else experience_years
+                data['years_experience_min'] = int(data['years_experience_min']) if data['years_experience_min'] is not None else experience_years
                 return data
             except json.JSONDecodeError:
                 continue
@@ -294,15 +273,15 @@ def extract_text_from_job(url: str, client: httpx.Client) -> Dict[str, Optional[
         return {
                 "hard_skills": [],
                 "soft_skills": [],
-                "Years of experience": None, 
-                "Experience domain preference": []}
+                "years_experience_min": None, 
+                "domains": []}
     except Exception as e:
         st.warning(f"Erreur extract_text_from_job: {e}")
         return {
                 "hard_skills": [],
                 "soft_skills": [],
-                "Years of experience": None, 
-                "Experience domain preference": []}
+                "years_experience_min": None, 
+                "domains": []}
 
 def enrich_offers(client: httpx.Client, offers: List[Dict[str, Optional[str]]], max_num_of_offers: int, status_box, bar) -> List[Dict[str, Optional[str]]]:
     results = []

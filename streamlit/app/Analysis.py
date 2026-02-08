@@ -51,9 +51,9 @@ df["hard_skills"] = df["hard_skills"].apply(to_list).apply(lambda lst: [clean_sk
 df["soft_skills"] = df["soft_skills"].apply(to_list).apply(lambda lst: [clean_skill(x) for x in lst if str(x).strip()])
 
 # Expérience (si dispo)
-has_exp = "Years of experience" in df.columns
+has_exp = "years_experience_min" in df.columns
 if has_exp:
-    df["years_num"] = df["Years of experience"].apply(parse_years)
+    df["years_num"] = df["years_experience_min"].apply(parse_years)
 
 # Paramètres utilisateur
 top_n = st.slider("Nombre de compétences à afficher", 5, 50, 20, 5)
@@ -93,7 +93,7 @@ with tab_soft:
 
 with tab_exp:
     if not has_exp:
-        st.info("Colonne 'Years of experience' absente → pas d'analyse expérience.")
+        st.info("Colonne 'years_experience_min' absente → pas d'analyse expérience.")
         st.stop()
 
     exp_series = df["years_num"].dropna()

@@ -78,7 +78,7 @@ WIREGUARD_PRIVATE_KEY=****
 # Google API Key gen ai
 GENAI_API_KEY=****
 ```
-### 4️⃣ Start the services
+4. Start the services
 
 Run the following command in your terminal:
 
@@ -86,6 +86,10 @@ Run the following command in your terminal:
 docker compose up -d
 ```
 5. You can run the web app locally on *http://localhost:8501/*
+
+## Video of the result
+
+
 
 Notes:
 - This project is for educational and research purposes only.
