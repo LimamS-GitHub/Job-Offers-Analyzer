@@ -59,8 +59,8 @@ Client → localhost:8001 (Gluetun) → Target Website (via VPN) → FastAPI Scr
 
 
 ## Quick start
-1. Create a Free protonvpn account then get your ProtonVPN/Wireguard credentials.
-2. Create an API key on Google Generative AI and keep it secure.
+1. Create a Free protonvpn account ([link](https://protonvpn.com/fr/l/vpn-home-free?url_id=397&utm_campaign=ww-all-2c-vpn-gro_aff-g_acq-partners_program&utm_source=aid-tune-1725&utm_medium=link&utm_term=vpn_home_free_landing&utm_content=26&phfp=false)) then get your ProtonVPN/Wireguard credentials. <img src="Proton_vpn.png" alt="Image" style="max-width: 40%; height: auto;">
+2. Create an API key on Google Generative AI.
 2. Create `.env` and configure your ProtonVPN/Wireguard credentials.
 
 .env example :
@@ -89,6 +89,3 @@ docker compose up -d
 
 Notes:
 - This project is for educational and research purposes only.
-- Make sure to respect websites’ Terms of Service when scraping.
-- Avoid collecting or storing personal or sensitive data.
-- Use reasonable request rates to prevent abuse or service disruption.
