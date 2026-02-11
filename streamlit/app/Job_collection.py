@@ -36,27 +36,26 @@ MODEL = genai.GenerativeModel("gemini-2.5-flash-lite")
 
 def prompt_gemini(job_offer: str) -> str:
     return f"""
-Tu es un extracteur d'informations d'offres d'emploi.
-Réponds uniquement avec un JSON valide. Pas de markdown. Pas de texte.
+    Tu es un extracteur d'informations d'offres d'emploi.
+    Réponds uniquement avec un JSON valide. Pas de markdown. Pas de texte.
 
-Contraintes:
-- N'invente rien.
-- Si absent: null ou [].
-- Déduplique, trim, normalise (même casse).
-- Respecte EXACTEMENT les clés ci-dessous.
+    Contraintes:
+    - N'invente rien.
+    - Si absent: null ou [].
+    - Déduplique, trim, normalise (même casse).
+    - Respecte EXACTEMENT les clés ci-dessous.
 
-JSON attendu:
-{{
-  "hard_skills": [],
-  "soft_skills": [],
-  "years_experience_min": null,
-  "domains": []
-}}
+    JSON attendu:
+    {{
+    "hard_skills": [],
+    "soft_skills": [],
+    "years_experience_min": null,
+    "domains": []
+    }}
 
-Texte:
-\"\"\"{job_offer}\"\"\"
-""".strip()
-
+    Texte:
+    \"\"\"{job_offer}\"\"\"
+    """.strip()
 
 def build_search_url(job: str, country: str, contract_type: str = "") -> str:
     """

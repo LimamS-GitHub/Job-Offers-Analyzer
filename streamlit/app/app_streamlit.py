@@ -1,9 +1,7 @@
 import streamlit as st
 
-
 if "all_offers" not in st.session_state:
     st.session_state.all_offers = []
-
 
 pg = st.navigation(
     [

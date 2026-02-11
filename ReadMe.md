@@ -1,21 +1,21 @@
-# Offers Analytics — Scraper API behind VPN (Gluetun + ProtonVPN WireGuard)
+# AI Offers Analytics — Secure VPN-Based Architecture
 
-This project provides a secure scraping pipeline powered by FastAPI, where all outbound traffic is routed through a VPN tunnel using Gluetun (WireGuard + ProtonVPN).  
-A Streamlit application is included to visualize and analyze extracted job offers.
+This project provides a secure job-offer scraping and analytics pipeline, where all outbound traffic is routed through a VPN tunnel using Gluetun with ProtonVPN (WireGuard).
 
-The architecture ensures that no network traffic can bypass the VPN, thanks to Gluetun’s firewall and kill-switch mechanisms.
+A Streamlit application is included to scrape, visualize, and analyze extracted job offers using AI-powered techniques.
+
+The architecture guarantees that no network traffic can bypass the VPN, thanks to Gluetun’s built-in firewall and kill-switch mechanisms.
 
 ---
 
 ## 🚀 Features
-
-- ✅ FastAPI scraping API to fetch and process web pages  
+ 
 - ✅ All outbound traffic forced through ProtonVPN (WireGuard)  
-- ✅ Kill-switch & firewall protection via Gluetun  
-- ✅ Streamlit web app for job offer analysis and visualization  
+- ✅ Kill-switch & firewall protection via Gluetun
 - ✅ Dockerized architecture for reproducible deployment  
 - ✅ Secure handling of environment variables (.env)  
 - ✅ AI-based extraction of skills and job information (Google GenAI)
+- ✅ Streamlit web app for job offer analysis and visualization  
 
 ---
 
@@ -26,35 +26,31 @@ The architecture ensures that no network traffic can bypass the VPN, thanks to G
 - **gluetun**  
   VPN gateway (WireGuard → ProtonVPN) with firewall and kill-switch.
 
-- **scraper**  
-  FastAPI service that performs web scraping.  
-  It shares Gluetun’s network stack using:
-  ```yaml
-  network_mode: service:gluetun
-
-- **streamlit app** - Web interface to analyze and visualize scraped job offers using NLP and AI.
-
-### Network flow
-
-Client → localhost:8001 (Gluetun) → Target Website (via VPN) → FastAPI Scraper
+- **streamlit app** - 
+  Web interface used to scrape, analyze, and visualize job offers using NLP and AI.
+  The application shares Gluetun’s network stack, ensuring that all HTTP requests go through the VPN:
+    ```yaml
+    network_mode: service:gluetun
+    ```
 
 ## Project structure
 ```
-.
-├── docker-compose.yml         # Orchestrates gluetun, scraper, and streamlit services
-├── .env                       # Environment variables (ProtonVPN credentials, API keys)
-├── scraper/                   # FastAPI scraping service
-│   ├── Dockerfile             # Container image for scraper
-│   ├── requirements.txt       # Python dependencies
+├── docker-compose.yml          # Orchestrates Gluetun + Streamlit services
+├── .env                        # Global environment variables (VPN, API keys)
+├── Proton_vpn.png              # ProtonVPN setup illustration
+├── ReadMe.md                   # Project documentation
+├── test_scrap.ipynb            # Notebook for local scraping tests
+├── streamlit/                  # Streamlit application (multipage)
+│   ├── Dockerfile              # Streamlit container image
+│   ├── requirements.txt        # Python dependencies for Streamlit app
+│   ├── .env                    # Streamlit-specific environment variables
 │   └── app/
-│       └── main.py            # FastAPI application entry point
-├── streamlit/                 # Data visualization and analysis app
-│   ├── app/
-│   │   ├── .env               # Environment variables (ProtonVPN credentials, API keys)
-│   │   └── app_streamlit.py   # Streamlit UI application
-│   ├── Dockerfile             # Container image for streamlit
-│   └── requirements.txt       # Python dependencies
-└── README.md                  # This file
+│       ├── app_streamlit.py    # Main Streamlit entry point
+│       ├── Overview.py         # Overview / dashboard page
+│       ├── Job_collection.py   # Job scraping & collection page
+│       ├── Analysis.py         # Skills & experience analytics
+│       ├── access_jobs.py      # Job access & filtering page
+
 ```
 
 
@@ -89,6 +85,9 @@ docker compose up -d
 
 ## Video of the result
 
+![Preview](Video.gif)
+
+[▶️ Watch full video](Video.mp4)
 
 
 Notes:
