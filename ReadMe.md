@@ -1,4 +1,4 @@
-# AI Offers Analytics — Secure VPN-Based Architecture
+# AI Offers Analytics with a Secure VPN-Based Architecture
 
 This project provides a secure job-offer scraping and analytics pipeline, where all outbound traffic is routed through a VPN tunnel using Gluetun with ProtonVPN (WireGuard).
 
@@ -8,42 +8,38 @@ The architecture guarantees that no network traffic can bypass the VPN, thanks t
 
 ---
 
-## 🚀 Features
- 
-- ✅ All outbound traffic forced through ProtonVPN (WireGuard)  
-- ✅ Kill-switch & firewall protection via Gluetun
-- ✅ Dockerized architecture for reproducible deployment  
-- ✅ Secure handling of environment variables (.env)  
-- ✅ AI-based extraction of skills and job information (Google GenAI)
-- ✅ Streamlit web app for job offer analysis and visualization  
-
----
-
 ## 🏗️ Architecture
 
 ### Services
 
 - **gluetun**  
-  VPN gateway (WireGuard → ProtonVPN) with firewall and kill-switch.
+  VPN gateway based on WireGuard (ProtonVPN) providing a firewall, kill switch, and DNS leak protection.
 
-- **streamlit app** - 
-  Web interface used to scrape, analyze, and visualize job offers using NLP and AI.
-  The application shares Gluetun’s network stack, ensuring that all HTTP requests go through the VPN:
-    ```yaml
-    network_mode: service:gluetun
-    ```
+- **Streamlit App**  
+  Web-based interface used to **scrape, visualize, and analyze job offers in France only**.  
+  The application generates interactive dashboards and insights on:
+  - Hard skills  
+  - Soft skills  
+  - Required experience  
+  - Geographic distribution (cities)
+
+  The app shares Gluetun’s network stack to ensure that **all outgoing HTTP requests are routed through the VPN**, guaranteeing anonymity and network isolation:
+
+  ```yaml
+  network_mode: service:gluetun
+  ```
 
 ## Project structure
 ```
 ├── docker-compose.yml          # Orchestrates Gluetun + Streamlit services
-├── .env                        # Global environment variables (VPN, API keys)
+├── .env                        # Global environment variables (VPN, API keys) ###### Important to create ######
 ├── Proton_vpn.png              # ProtonVPN setup illustration
 ├── ReadMe.md                   # Project documentation
 ├── test_scrap.ipynb            # Notebook for local scraping tests
 ├── streamlit/                  # Streamlit application (multipage)
 │   ├── Dockerfile              # Streamlit container image
 │   ├── requirements.txt        # Python dependencies for Streamlit app
-│   ├── .env                    # Streamlit-specific environment variables
+│   ├── .env                    # Streamlit-specific environment variables ###### Important to create ######
 │   └── app/
 │       ├── app_streamlit.py    # Main Streamlit entry point
 │       ├── Overview.py         # Overview / dashboard page
@@ -85,7 +81,7 @@ docker compose up -d
 
 ## Video of the result
 
-![Preview](Video.gif)
+![Preview](Job_offers_skills_analysis.gif)
 
 [▶️ Watch full video](Video.mp4)
 

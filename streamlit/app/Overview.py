@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("Welcome to the Job Offers & Skills Analyzer")
+st.title("Welcome to the Job Offers and Skills Analyzer")
 
 st.write(
     """

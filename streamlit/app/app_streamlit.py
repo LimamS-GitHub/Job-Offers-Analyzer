@@ -8,7 +8,7 @@ pg = st.navigation(
         "Overview.py",
         "Job_collection.py",
         "Analysis.py",
-        "access_jobs.py",
+        "Access_jobs.py",
     ]
 )
 
