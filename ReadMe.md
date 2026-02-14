@@ -35,7 +35,6 @@ The architecture guarantees that no network traffic can bypass the VPN, thanks t
 ├── .env                        # Global environment variables (VPN, API keys) ###### Important to create ######
 ├── Proton_vpn.png              # ProtonVPN setup illustration
 ├── ReadMe.md                   # Project documentation
-├── test_scrap.ipynb            # Notebook for local scraping tests
 ├── streamlit/                  # Streamlit application (multipage)
 │   ├── Dockerfile              # Streamlit container image
 │   ├── requirements.txt        # Python dependencies for Streamlit app
