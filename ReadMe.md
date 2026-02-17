@@ -82,7 +82,7 @@ docker compose up -d
 
 ![Preview](Job_offers_skills_analysis.gif)
 
-[▶️ Watch full video](Video.mp4)
+[▶️ Watch full video](https://www.youtube.com/watch?v=z8hkBHapNx0)
 
 
 Notes:
